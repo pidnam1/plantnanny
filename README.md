@@ -1,1 +1,1 @@
-# plantnanny
+# EIT Plant Nanny project repo
