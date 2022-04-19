@@ -1,0 +1,84 @@
+#topHeader {
+  background-color: #fcd485;
+  text-align: center;
+}
+
+#title {
+  font-family: "Rubik Moonrocks", cursive;
+  font-size: 50px;
+  color: white;
+}
+
+#main {
+  background-color: #fff0cc;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 10px;
+}
+
+.rounded-circle {
+  width: 100%;
+  object-fit: cover;
+  height: 120px;
+  width: 120px;
+}
+
+.plantDisplay {
+  padding: 5px;
+  /* justify-content: center; */
+  text-align: center;
+}
+
+#name {
+  text-align: center;
+  background-color: #b6de89;
+  font-weight: bold;
+  padding: 3px;
+}
+
+#feelingTitle,
+#careTitle {
+  font-weight: bold;
+}
+
+#feeling {
+  text-align: center;
+  background-color: #c9ebff;
+  font-weight: bold;
+  padding: 5px;
+  font-size: x-large;
+}
+
+#updateButton {
+  background-color: #b6de89;
+}
+
+.current-status,
+.sensorSection {
+  padding: 5px;
+  margin-left: 50px;
+}
+
+#statusHeader,
+#sensorHeader {
+  font-weight: bold;
+}
+
+.card-group {
+  padding: 5px;
+}
+
+#measurementCard {
+  text-align: center;
+}
+
+#temperature {
+  color: red;
+}
+
+#light {
+  color: yellow;
+}
+
+#moisture {
+  color: green;
+}
