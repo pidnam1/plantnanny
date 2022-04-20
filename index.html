@@ -19,6 +19,7 @@
       href="https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&display=swap"
       rel="stylesheet"
     />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <title>Plant Nanny</title>
   </head>
   <body>
@@ -33,9 +34,9 @@
     <div id="main">
       <div class="container">
         <div class="row" id="part1">
-          <div class="col-4">
+          <div class="col-2">
             <div class="plantDisplay">
-              <img src="spiderplant.jpg" class="rounded-circle" alt="Plant image" />
+              <img src="pinkpolka.jpg" class="rounded-circle" alt="Plant image" />
               <div class="card mt-2" id="name">Plant Name: Poppy</div>
             </div>
           </div>
@@ -45,19 +46,19 @@
               <h5 id="statusHeader">Here is Poppy's current health...</h5>
               <div class="card-group">
                 <div class="col">
-                  <div class="card border-danger h-100" id="measurementCard">
-                    <h1 id="temperature">72 F</h1>
+                  <div class="card care_cards" id="measurementCard">
+                    <h1 id="temperature">72 °F</h1>
                     Temperature
                   </div>
                 </div>
                 <div class="col">
-                  <div class="card border-warning h-100" id="measurementCard">
-                    <h1 id="light">84%</h1>
+                  <div class="card care_cards" id="measurementCard">
+                    <h1 style="align-content: center" id="light">84%</h1>
                     Light Level
                   </div>
                 </div>
                 <div class="col">
-                  <div class="card border-success h-100" id="measurementCard">
+                  <div class="card care_cards" id="measurementCard">
                     <h1 id="moisture">33%</h1>
                     Soil Moisture
                   </div>
@@ -68,17 +69,17 @@
         </div>
 
         <div class="row mt-5" id="part2">
-          <div class="col-4">
+          <div class="col-2">
             <div class="feelingSection">
-              <h5 id="feelingTitle">Poppy is feeling...</h5>
+              <h6 id="feelingTitle">Poppy is feeling...</h5>
               <div class="card mt-2" id="feeling">Thirsty</div>
             </div>
             <div class="care mt-4">
-              <h5 id="careTitle">Poppy's Care:</h5>
+              <h6 id="careTitle">Poppy's Care:</h5>
               <ul class="list-group">
-                <li class="list-group-item">Temperature:</li>
-                <li class="list-group-item">Light Level:</li>
-                <li class="list-group-item">Soil Moisture:</li>
+                <li class="list-group-item care_bars">Temperature:</li>
+                <li class="list-group-item care_bars">Light Level:</li>
+                <li class="list-group-item care_bars">Soil Moisture:</li>
               </ul>
               <br />
               <button type="button" class="btn" id="updateButton">Update Profile</button>
