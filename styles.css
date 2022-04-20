@@ -1,94 +1,13 @@
 #topHeader {
-<<<<<<< HEAD
-    background-color: #FCD485;
-    text-align: center;
-}
-
-#title {
-    font-family: 'Rubik Moonrocks', cursive;
-    font-size: 50px;
-    color: white;
-}
-
-#main{
-    background-color: #fff0cc;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-    padding: 10px;
-}
-
-.rounded-circle{
-    width: 100%;
-    object-fit: cover;
-    height: 120px;
-    width: 120px;
-}
-
-.plantDisplay{
-    padding: 5px;
-    /* justify-content: center; */
-    text-align: center;
-}
-
-#name{
-    text-align: center;
-    background-color: #B6DE89;
-    font-weight: bold;
-    padding: 3px;
-}
-
-#feelingTitle, #careTitle{
-    font-weight: bold;
-}
-
-#feeling{
-    text-align: center;
-    background-color: #c9ebff;
-    font-weight: bold;
-    padding: 5px;
-    font-size: x-large;
-}
-
-#updateButton{
-    background-color: #B6DE89;
-}
-
-.current-status, .sensorSection{
-    padding: 5px;
-    margin-left: 50px;
-}
-
-#statusHeader, #sensorHeader{
-    font-weight: bold;
-}
-
-.card-group{
-    padding: 5px;
-}
-
-#measurementCard{
-    text-align: center;
-}
-
-#temperature{
-    color: red;
-}
-
-#light{
-    color: yellow;
-}
-
-#moisture{
-    color: green;
-}
-=======
   background-color: #fcd485;
   text-align: center;
 }
 
 #title {
-  font-family: "Rubik Moonrocks", cursive;
+  font-family: "Pontano Sans", cursive;
   font-size: 50px;
-  color: white;
+  color: black;
+  text-align: center;
 }
 
 #main {
@@ -98,23 +17,27 @@
 }
 
 .rounded-circle {
-  width: 100%;
   object-fit: cover;
-  height: 120px;
-  width: 120px;
+  height: 200px;
+  width: 200px;
+  outline: black solid 1.5px;
 }
 
 .plantDisplay {
   padding: 5px;
   /* justify-content: center; */
-  text-align: center;
+  /* text-align: center; */
 }
 
 #name {
   text-align: center;
-  background-color: #b6de89;
+  font-family: Poppins;
+  background-color: #9ED373;
   font-weight: bold;
-  padding: 3px;
+  padding: 5px;
+  width: 200px;
+  border-radius: 0px;
+  outline: black solid 1.5px;
 }
 
 #feelingTitle,
@@ -124,14 +47,20 @@
 
 #feeling {
   text-align: center;
-  background-color: #c9ebff;
+  background-color: #F3FFF9;
   font-weight: bold;
   padding: 5px;
   font-size: x-large;
+  border-radius: 15px;
+  outline: black solid 1.5px;
+  width: 200px;
 }
 
 #updateButton {
   background-color: #b6de89;
+  border-radius: 24px;
+  width: 200px;
+  font-family: Poppins;
 }
 
 .current-status,
@@ -143,6 +72,7 @@
 #statusHeader,
 #sensorHeader {
   font-weight: bold;
+  
 }
 
 .card-group {
@@ -151,17 +81,28 @@
 
 #measurementCard {
   text-align: center;
+  width: 200px;
+  height: 200px;
 }
 
 #temperature {
-  color: red;
+  color: #FF0000;
 }
 
 #light {
-  color: yellow;
+  color: #FFD600;
 }
 
 #moisture {
-  color: green;
+  color: #579AD8;
 }
->>>>>>> 1240d46fcb8b3a7eb83ddf0601baed0846042969
+
+.care_bars {
+  width: 200px;
+}
+
+.care_cards {
+  display: flex;
+  justify-content: center;
+  outline: black solid 1.5px;
+}

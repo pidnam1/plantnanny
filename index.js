@@ -34,7 +34,8 @@ app.use(express.static("public")); //Send index.html page on GET /
 const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 const port = new SerialPort({
-  path: "/dev/cu.usbserial-1420", //put your serial port here
+  // path: "/dev/cu.usbserial-1420", //put your serial port here
+  path: "COM4",
   baudRate: 115200,
 });
 
