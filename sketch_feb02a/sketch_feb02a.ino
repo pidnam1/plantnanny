@@ -2,10 +2,24 @@
 int redPin = 9;                // output pin number to Red pin of the LED
 int greenPin = 10;              // output pin number to Green pin
 int bluePin = 11;                // output pin number to Blue pin
-int lightSensorPin = A0;   // voltage input. Use any ADC pin (starts with A)
+int lightPin = A0;   // voltage input. Use any ADC pin (starts with A)
 int hygrometerPin = A1;
-int lightSensorValue = 0;  // stores value from ADC
+int tempPin = A2;
+int lightValue = 0;  // stores value from ADC
 int hygrometerValue = 0;
+int tempValue = 0;
+int lightLow = 800;        // range for light, hygrometer, and temp
+int lightHigh = 980;
+int hygrometerLow = 10;
+int hygrometerHigh = 25;
+int tempLow = 140;
+int tempHigh = 150;
+int lightMedian = (lightLow + lightHigh) / 2;
+int hygrometerMedian = (hygrometerLow + hygrometerHigh) / 2;
+int tempMedian = (tempLow + tempHigh) / 2;
+int lightRange = lightHigh - lightLow;
+int hygrometerRange = hygrometerHigh - hygrometerLow;
+int tempRange = tempHigh - tempLow;
 String color = "green";
 int blinkSpeed = 0;
 
@@ -22,25 +36,50 @@ void doBlink(int blinkSpeed);
 
 void loop()                     // this runs over and over again forever
 {
-  int lightSensorValue = analogRead (lightSensorPin);   // reads the sensor
+  int lightValue = analogRead (lightPin);   // reads the sensor
   int hygrometerValue = analogRead (hygrometerPin);
-  Serial.print(lightSensorValue);   // Prints the value via the serial port
-  Serial.print(" ");
-  Serial.println(hygrometerValue);
-
+  int tempValue = analogRead (tempPin);
   
-  if (lightSensorValue < 800) {
-    color = "yellow";
-    blinkSpeed = 1;
-  } else if (lightSensorValue > 980) {
-    color = "yellow";
-    blinkSpeed = 2;
-  } else if (hygrometerValue < 10) {
-    color = "blue";
-    blinkSpeed = 1;
-  } else if (hygrometerValue > 25) {
-    color = "blue";
-    blinkSpeed = 2;
+  Serial.print(lightValue);   // Prints the value via the serial port
+  Serial.print(" ");
+  Serial.print(hygrometerValue);
+  Serial.print(" ");
+  Serial.println(tempValue);
+
+  float normalLightValue = ((float) abs(lightValue - lightMedian)) / lightRange;
+  float normalHygrometerValue = ((float) abs(hygrometerValue - hygrometerMedian)) / hygrometerRange;
+  float normalTempValue = ((float) abs(tempValue - tempMedian)) / tempRange;
+
+  Serial.print(normalLightValue);   // Prints the value via the serial port
+  Serial.print(" ");
+  Serial.print(normalHygrometerValue);
+  Serial.print(" ");
+  Serial.println(normalTempValue);
+
+  if(normalLightValue > .5 && normalLightValue > normalHygrometerValue && normalLightValue > normalTempValue) {
+    if (lightValue < lightLow) {
+      color = "yellow";
+      blinkSpeed = 1;
+    } else {
+      color = "yellow";
+      blinkSpeed = 2;
+    }
+  } else if(normalHygrometerValue > .5 && normalHygrometerValue > normalLightValue && normalHygrometerValue > normalTempValue) {
+    if (hygrometerValue < hygrometerLow) {
+      color = "blue";
+      blinkSpeed = 1;
+    } else {
+      color = "blue";
+      blinkSpeed = 2;
+    }
+  } else if(normalTempValue > .5 && normalTempValue > normalHygrometerValue && normalTempValue > normalLightValue) {
+    if (tempValue < tempLow) {
+      color = "red";
+      blinkSpeed = 1;
+    } else {
+      color = "red";
+      blinkSpeed = 2;
+    }
   } else {
     color = "green";
     blinkSpeed = 0;
