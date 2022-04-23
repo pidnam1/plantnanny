@@ -2,26 +2,30 @@
 int redPin = 9;                // output pin number to Red pin of the LED
 int greenPin = 10;              // output pin number to Green pin
 int bluePin = 11;                // output pin number to Blue pin
+
 int lightPin = A0;   // voltage input. Use any ADC pin (starts with A)
 int hygrometerPin = A1;
 int tempPin = A2;
+
 int lightValue = 0;  // stores value from ADC
 int hygrometerValue = 0;
 int tempValue = 0;
+
 int lightLow = 800;        // range for light, hygrometer, and temp
 int lightHigh = 980;
 int hygrometerLow = 10;
 int hygrometerHigh = 25;
-int tempLow = 140;
-int tempHigh = 150;
-int lightMedian = (lightLow + lightHigh) / 2;
-int hygrometerMedian = (hygrometerLow + hygrometerHigh) / 2;
-int tempMedian = (tempLow + tempHigh) / 2;
-int lightRange = lightHigh - lightLow;
-int hygrometerRange = hygrometerHigh - hygrometerLow;
-int tempRange = tempHigh - tempLow;
+int tempLow = 65;
+int tempHigh = 80;
+
 String color = "green";
 int blinkSpeed = 0;
+
+const int inputLength = 30;
+char inputValues[inputLength];
+int index = 0;
+int spaces = 0;
+int readValue = 0;
 
 void setup()                    // this runs once, when the sketch starts
 {
@@ -36,9 +40,17 @@ void doBlink(int blinkSpeed);
 
 void loop()                     // this runs over and over again forever
 {
+  int lightMedian = (lightLow + lightHigh) / 2;
+  int hygrometerMedian = (hygrometerLow + hygrometerHigh) / 2;
+  int tempMedian = (tempLow + tempHigh) / 2;
+  
+  int lightRange = lightHigh - lightLow;
+  int hygrometerRange = hygrometerHigh - hygrometerLow;
+  int tempRange = tempHigh - tempLow;
+  
   int lightValue = analogRead (lightPin);   // reads the sensor
   int hygrometerValue = analogRead (hygrometerPin);
-  int tempValue = analogRead (tempPin);
+  float tempValue = analogRead (tempPin) * 0.48828125;
   
   Serial.print(lightValue);   // Prints the value via the serial port
   Serial.print(" ");
@@ -55,6 +67,18 @@ void loop()                     // this runs over and over again forever
   Serial.print(normalHygrometerValue);
   Serial.print(" ");
   Serial.println(normalTempValue);
+
+//  Serial.print(lightLow);   // Prints the value via the serial port
+//  Serial.print(" ");
+//  Serial.print(lightHigh);
+//  Serial.print(" ");
+//  Serial.print(hygrometerLow);
+//  Serial.print(" ");
+//  Serial.print(hygrometerHigh);
+//  Serial.print(" ");
+//  Serial.print(tempLow);
+//  Serial.print(" ");
+//  Serial.println(tempHigh);
 
   if(normalLightValue > .5 && normalLightValue > normalHygrometerValue && normalLightValue > normalTempValue) {
     if (lightValue < lightLow) {
@@ -86,6 +110,50 @@ void loop()                     // this runs over and over again forever
   }
   setColor(color);
   doBlink(blinkSpeed);
+}
+
+void serialEvent()
+{
+  
+  while(Serial.available()){
+    char ch = Serial.read();
+    if(ch == ' ')
+      spaces++;
+    if(index < inputLength && spaces < 6) {
+      inputValues[index++] = ch;
+    } else {
+      index = 0;
+      readValue = atoi(inputValues);
+      lightLow = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      lightHigh = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      hygrometerLow = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      hygrometerHigh = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      tempLow = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      tempHigh = readValue;
+      index = 0;
+      spaces = 0;
+    }
+  }
 }
 
 void setColor(String color){
