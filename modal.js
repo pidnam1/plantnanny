@@ -29,9 +29,10 @@ document.addEventListener("click", (j) => {
     document.getElementById("list_light").innerHTML = elem2;
     document.getElementById("list_soil").innerHTML = elem3;
 
-    document.getElementById("temperature_input").value = "";
-    document.getElementById("light_input").value = "";
-    document.getElementById("soil_input").value = "";
+    //document.getElementById("form_id").reset();
+    //document.getElementById("temperature_input").value = "";
+    //document.getElementById("light_input").value = "";
+    //document.getElementById("soil_input").value = "";
   }
 });
 
