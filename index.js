@@ -1,15 +1,26 @@
 var express = require("express");
-const path = require("path");
-
+var express = require("express");
+var path = require("path");
+var bodyParser = require("body-parser");
 var app = express();
+const cors = require("cors");
 var http = require("http").Server(app);
 var server = app.listen(5000, () => {
   //Start the server, listening on port 4000.
   console.log("Listening to requests on port 5000...");
 });
+var allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
 
+  next();
+};
+
+app.use(allowCrossDomain);
 //Testing graph
 app.use(express.static(path.join(__dirname, "")));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/graph", function (req, res) {
   res.sendFile(path.join(__dirname, "/graph.html"));
 });
@@ -19,6 +30,28 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
 
+const { SerialPort } = require("serialport");
+const { ReadlineParser } = require("@serialport/parser-readline");
+const port = new SerialPort({
+  // path: "/dev/cu.usbserial-1420", //put your serial port here
+  path: "/dev/cu.Bluetooth-Incoming-Port",
+  baudRate: 115200,
+});
+//post request
+app.post("/", cors(), function (req, res) {
+  console.log("hey");
+  console.log(req.body);
+  let temp = req.body.temperature_input;
+  let light_input = req.body.light_input;
+  let soil_input = req.body.soil_input;
+  port.write(temp + " " + light_input + " " + soil_input, (err) => {
+    if (err) {
+      return console.log("Error on write: ", err.message);
+    }
+    console.log("message written");
+  });
+  res.status(204).send();
+});
 const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:5000",
@@ -30,14 +63,6 @@ const io = require("socket.io")(server, {
 }); //Bind socket.io to our express server.
 
 app.use(express.static("public")); //Send index.html page on GET /
-
-const { SerialPort } = require("serialport");
-const { ReadlineParser } = require("@serialport/parser-readline");
-const port = new SerialPort({
-  // path: "/dev/cu.usbserial-1420", //put your serial port here
-  path: "COM4",
-  baudRate: 115200,
-});
 
 //Read the line only when new line comes. Buffer fooling around with speed.
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n", Buffer: 2 }));
