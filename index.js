@@ -34,7 +34,7 @@ const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 const port = new SerialPort({
   // path: "/dev/cu.usbserial-1420", //put your serial port here
-  path: "/dev/cu.Bluetooth-Incoming-Port",
+  path: "COM5",
   baudRate: 115200,
 });
 //post request
@@ -44,7 +44,7 @@ app.post("/", cors(), function (req, res) {
   let temp = req.body.temperature_input;
   let light_input = req.body.light_input;
   let soil_input = req.body.soil_input;
-  port.write(temp + " " + light_input + " " + soil_input, (err) => {
+  port.write(temp + " 1000 " + light_input + " 1000 " + soil_input + " 1000 ", (err) => {
     if (err) {
       return console.log("Error on write: ", err.message);
     }
