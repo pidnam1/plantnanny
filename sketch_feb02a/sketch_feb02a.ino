@@ -56,7 +56,7 @@ void loop()                     // this runs over and over again forever
   Serial.print(" ");
   Serial.print(lightValue);
   Serial.print(" ");
-  Serial.println(hygrometerValue);
+  Serial.print(hygrometerValue);
   Serial.print(" ");
 
 //    Serial.println(tempValue);
@@ -69,7 +69,7 @@ void loop()                     // this runs over and over again forever
  Serial.print(" ");
  Serial.print(normalHygrometerValue);
  Serial.print(" ");
- Serial.println(normalTempValue);
+ Serial.print(normalTempValue);
   
   normalLightValue = (abs)normalLightValue;
   normalHygrometerValue = (abs)normalHygrometerValue;
