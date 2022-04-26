@@ -17,13 +17,16 @@ document.addEventListener("click", (j) => {
     let elem2 = document.getElementById("list_light");
     let elem3 = document.getElementById("list_soil");
 
-    let temperature = document.getElementById("temperature_input").value;
-    let light = document.getElementById("light_input").value;
-    let soil = document.getElementById("soil_input").value;
+    let temperature_min = document.getElementById("temperature_input_min").value;
+    let temperature_max = document.getElementById("temperature_input_max").value;
+    let light_min = document.getElementById("light_input_min").value;
+    let light_max = document.getElementById("light_input_max").value;
+    let soil_min = document.getElementById("soil_input_min").value;
+    let soil_max = document.getElementById("soil_input_max").value;
 
-    elem1 = "Temperature: " + temperature.toString();
-    elem2 = "Light Level: " + light.toString();
-    elem3 = "Soil Moisture: " + soil.toString();
+    elem1 = "Temperature: " + temperature_min.toString() + " - " + temperature_max.toString();
+    elem2 = "Light Level%: " + light_min.toString() + " - " + light_max.toString();
+    elem3 = "Soil Moisture%: " + soil_min.toString() + " - " + soil_max.toString();
 
     document.getElementById("list_temp").innerHTML = elem1;
     document.getElementById("list_light").innerHTML = elem2;

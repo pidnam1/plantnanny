@@ -72,15 +72,15 @@
           <div class="col-2">
             <div class="feelingSection">
               <h6 id="feelingTitle">Poppy is feeling...</h5>
-              <div class="card mt-2" id="feeling">Thirsty</div>
+              <div class="card mt-2" id="feeling">Healthy</div>
             </div>
             <div class="care mt-4">
 
               <h6 id="careTitle">Poppy's Care:</h5>
               <ul class="list-group">
-                <li id = "list_temp" class="list-group-item care_bars">Temperature:</li>
-                <li id = "list_light" class="list-group-item care_bars">Light Level:</li>
-                <li id = "list_soil" class="list-group-item care_bars">Soil Moisture:</li>
+                <li id = "list_temp" data-value="a" class="list-group-item care_bars">Temperature:</li>
+                <li id = "list_light" class="list-group-item care_bars">Light Level%:</li>
+                <li id = "list_soil" class="list-group-item care_bars">Soil Moisture%:</li>
               </ul>
               <br />
               <button type="button" class="btn modal-open" data-id="demo-modal" id="updateButton">Update Profile</button>
@@ -93,12 +93,18 @@
                     </div>
                     <div class="form-group" style="text-align:center;">
                         <form name="form_name" action="/" id="form_id" method="POST" class="form_class" >
-                          <label>Temperature:</label>
-                          <input type="text" name="temperature_input" id="temperature_input" placeholder="Temperature" />
-                          <label>Light Levels :</label>
-                          <input type="text" name="light_input" id="light_input" placeholder="Light Level" />
-                          <label>Soil Moisture:</label>
-                          <input type="text" name="soil_input" id="soil_input" placeholder="Soil Moisture" />
+                          <label>Temperature Min:</label>
+                          <input type="text" name="temperature_input" id="temperature_input_min" placeholder="Temperature Min" />
+                          <label>Temperature Max:</label>
+                          <input type="text" name="temperature_input" id="temperature_input_max" placeholder="Temperature Max" />
+                          <label>Light Level Min%:</label>
+                          <input type="text" name="light_input" id="light_input_min" placeholder="Light Level" />
+                          <label>Light Level Max%:</label>
+                          <input type="text" name="light_input" id="light_input_max" placeholder="Light Level" />
+                          <label>Soil Moisture Min%:</label>
+                          <input type="text" name="soil_input" id="soil_input_min" placeholder="Soil Moisture" />
+                          <label>Soil Moisture Max%:</label>
+                          <input type="text" name="soil_input" id="soil_input_max" placeholder="Soil Moisture" />
                           <button type ="submit" class = "submit_values"data-id="modal_button">Submit</button>
                         </form>
                         
@@ -143,7 +149,8 @@
           labels: [],
           datasets: [
             {
-              label: "Temperature",
+              label: 'Temperature',
+              yAxisID: 'A',
               borderColor: "#FF5733",
               data: [],
               fill: false,
@@ -153,35 +160,170 @@
               pointHoverRadius: 7,
               lineTension: 0,
             },
+            {
+              label: 'Light Level',
+              yAxisID: 'B',
+              borderColor: "#FG5733",
+              data: [],
+              fill: false,
+              pointStyle: "circle",
+              backgroundColor: "#FFFFFF",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              lineTension: 0,
+            },
+            {
+              label: 'Soil Moisture',
+              yAxisID: 'B',
+              borderColor: "#FGHEQ",
+              data: [],
+              fill: false,
+              pointStyle: "circle",
+              backgroundColor: "#HERYT",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              lineTension: 0,
+            }
           ],
         },
 
         // Configuration options go here
-        options: {},
+        options: {
+          responsive : true,
+      tooltips : {
+        callbacks : {
+          title : function() {
+            return 'More information:';
+          },
+        }
+      },
+    scales: {
+      yAxes: [{
+        id: 'A',
+        type: 'linear',
+        position: 'left',
+        scaleLabel: {
+        display: true,
+        labelString: 'Temperature(°F)'
+      },
+        ticks: {
+          max: 100,
+          min: 0
+        }
+      }, {
+        id: 'B',
+        type: 'linear',
+        position: 'right',
+        scaleLabel: {
+        display: true,
+        labelString: 'Percent(%)'
+      },
+        ticks: {
+          max: 100,
+          min: 0
+        }
+      }]
+    }
+  }
       });
 
       socket.on("temp", function (data) {
         //As a temp data is received
-        console.log(data.temp);
-        console.log(data.time);
-        //document.getElementById("date").innerHTML = data.date; //update the date
+        //console.log(data.temp);
+        //console.log(data.time);
+        document.getElementById("temperature").innerHTML = data.temp.toString() + "°F";
+        document.getElementById("light").innerHTML = data.light.toString() + "%";
+        document.getElementById("moisture").innerHTML = data.soil.toString() + "%";
+
+        
+        //update_status(); // updates if poppy is thirsty, hot, cold, etc
+        
+        const max_value = Math.max(data.norm_temp, data.norm_light, data.norm_soil);
+        console.log(max_value);
+        const min_value = Math.min(data.norm_temp, data.norm_light, data.norm_soil);
+        console.log(min_value);
+        const not_healthy = Math.abs(min_value) > 0.5 || Math.abs(max_value) > 0.5;
+        if(Math.abs(min_value) > Math.abs(max_value) && not_healthy){
+          switch(min_value){
+            case data.norm_temp:
+              document.getElementById("feeling").innerHTML = "Cold";
+              break;
+            case data.norm_light:
+              document.getElementById("feeling").innerHTML = "Shady";
+              break;
+            case data.norm_soil:
+              document.getElementById("feeling").innerHTML = "Dry";
+          }
+        }
+        else if(Math.abs(max_value) > Math.abs(min_value) && not_healthy){
+          switch(max_value){
+            case data.norm_temp:
+              document.getElementById("feeling").innerHTML = "Hot";
+              break;
+            case data.norm_light:
+              document.getElementById("feeling").innerHTML = "Sunny";
+              break;
+            case data.norm_soil:
+              document.getElementById("feeling").innerHTML = "Wet";
+          }
+        } else{
+          document.getElementById("feeling").innerHTML = "Healthy";
+        }
+
         if (chart.data.labels.length != 15) {
           //If we have less than 15 data points in the graph
           chart.data.labels.push(data.time); //Add time in x-asix
-          chart.data.datasets.forEach((dataset) => {
-            dataset.data.push(data.temp); //Add temp in y-axis
-          });
+          chart.data.datasets[0].data.push((data.temp));
+          chart.data.datasets[1].data.push((data.light));
+          chart.data.datasets[2].data.push((data.soil));
+         //Add temp in y-axis
+         
         } else {
           //If there are already 15 data points in the graph.
           chart.data.labels.shift(); //Remove first time data
           chart.data.labels.push(data.time); //Insert latest time data
-          chart.data.datasets.forEach((dataset) => {
-            dataset.data.shift(); //Remove first temp data
-            dataset.data.push(data.temp); //Insert latest temp data
-          });
+          chart.data.datasets[0].data.push((data.temp));
+          chart.data.datasets[1].data.push((data.light));
+          chart.data.datasets[2].data.push((data.soil));
         }
         chart.update(); //Update the graph.
       });
+
+      // function update_status(){
+      //   let temp_range = document.getElementById("list_temp").innerHTML;
+      //   let curr_min_temp = temp_range.slice(13, 15);
+      //   let curr_max_temp  = temp_range.slice(17);
+      //   console.log(curr_min_temp);
+      //   console.log(curr_max_temp);
+
+      //   let light_range = document.getElementById("list_light").innerHTML;
+      //   let curr_min_light = light_range.slice(14, 16);
+      //   let curr_max_light  = light_range.slice(18);
+      //   console.log(curr_min_light);
+      //   console.log(curr_max_light);
+
+      //   let soil_range = document.getElementById("list_soil").innerHTML;
+      //   let curr_min_soil = soil_range.slice(16, 19);
+      //   let curr_max_soil  = soil_range.slice(21);
+      //   console.log(curr_min_soil);
+      //   console.log(curr_max_soil);
+
+      //   const none_empty = !(curr_min_temp === "" || curr_max_temp === "" || curr_min_light === "" || curr_max_light === "" || curr_min_soil === "" || curr_max_soil === "")
+
+      //   if (none_empty){
+      //     curr_min_temp = parseInt(curr_min_temp);
+      //     curr_max_temp = parseInt(curr_max_temp);
+      //     curr_min_light = parseInt(curr_min_light);
+      //     curr_max_light = parseInt(curr_max_light);
+      //     curr_min_soil = parseInt(curr_min_soil);
+      //     curr_max_soil = parseInt(curr_max_soil);
+
+
+
+
+
+      //   }
+      // }
     </script>
  <script src="modal.js"></script> 
  

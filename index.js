@@ -44,7 +44,7 @@ app.post("/", cors(), function (req, res) {
   let temp = req.body.temperature_input;
   let light_input = req.body.light_input;
   let soil_input = req.body.soil_input;
-  port.write(temp + " " + light_input + " " + soil_input, (err) => {
+  port.write(temp + " " + light_input + " " + soil_input + " ", (err) => {
     if (err) {
       return console.log("Error on write: ", err.message);
     }
@@ -66,18 +66,40 @@ app.use(express.static("public")); //Send index.html page on GET /
 
 //Read the line only when new line comes. Buffer fooling around with speed.
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n", Buffer: 2 }));
-parser.on("data", (temp) => {
+parser.on("data", (temp, light, soil, norm_light, norm_soil, norm_temp) => {
   //Read data and print to test
   console.log(temp);
   //console.log("backend");
   var today = new Date();
-  io.sockets.emit("temp", {
-    date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
-    time: today.getHours() + ":" + today.getMinutes(),
-    temp: temp,
-  }); //emit the datd i.e. {date, time, temp} to all the connected clients.
+  setInterval(() => {
+    io.sockets.emit("temp", {
+      date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
+      time: today.getHours() + ":" + today.getMinutes(),
+      temp: temp,
+      light: light,
+      soil: soil,
+      norm_temp: norm_temp,
+      norm_light: norm_light,
+      norm_soil: norm_soil,
+    }); //emit the datd i.e. {date, time, temp} to all the connected clients.
+  }, 5000);
 });
 
 io.on("connection", (socket) => {
-  console.log("Someone connected."); //show a log as a new client connects, check socket is working.
+  console.log("Someone connected.");
+  // let today = new Date();
+  // counter = 0;
+  // setInterval(() => {
+  //   counter += 1;
+  //   socket.emit("temp", {
+  //     date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
+  //     time: today.getHours() + ":" + today.getMinutes(),
+  //     temp: 40 + counter,
+  //     light: 55 - counter,
+  //     soil: 80 - counter,
+  //     norm_temp: 0.4,
+  //     norm_light: 0.4,
+  //     norm_soil: -0.4,
+  //   }); //show a log as a new client connects, check socket is working.
+  // }, 5000);
 });
