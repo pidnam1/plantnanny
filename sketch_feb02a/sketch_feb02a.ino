@@ -57,6 +57,7 @@ void loop()                     // this runs over and over again forever
   Serial.print(lightValue);
   Serial.print(" ");
   Serial.println(hygrometerValue);
+  Serial.print(" ");
 
 //    Serial.println(tempValue);
   
