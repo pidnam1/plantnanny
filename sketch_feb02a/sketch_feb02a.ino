@@ -11,8 +11,8 @@ int lightValue = 0;  // stores value from ADC
 int hygrometerValue = 0;
 int tempValue = 0;
 
-int lightLow = 800;        // range for light, hygrometer, and temp
-int lightHigh = 980;
+int lightLow = 75;        // range for light, hygrometer, and temp
+int lightHigh = 95;
 int hygrometerLow = 10;
 int hygrometerHigh = 25;
 int tempLow = 65;
@@ -48,25 +48,33 @@ void loop()                     // this runs over and over again forever
   int hygrometerRange = hygrometerHigh - hygrometerLow;
   int tempRange = tempHigh - tempLow;
   
-  int lightValue = analogRead (lightPin);   // reads the sensor
-  int hygrometerValue = analogRead (hygrometerPin);
-  float tempValue = analogRead (tempPin) * 0.48828125;
+  int lightValue = map(analogRead(lightPin), 0, 1023, 0, 100);   // reads the sensor
+  int hygrometerValue = map(analogRead(hygrometerPin), 0, 1023, 0, 100);
+  float tempValue = analogRead(tempPin) * 0.48828125;
   
-  Serial.print(lightValue);   // Prints the value via the serial port
+  Serial.print(tempValue);   // Prints the value via the serial port
   Serial.print(" ");
-  Serial.print(hygrometerValue);
+  Serial.print(lightValue);
   Serial.print(" ");
-  Serial.println(tempValue);
+  Serial.println(hygrometerValue);
+  Serial.print(" ");
 
-  float normalLightValue = ((float) abs(lightValue - lightMedian)) / lightRange;
-  float normalHygrometerValue = ((float) abs(hygrometerValue - hygrometerMedian)) / hygrometerRange;
-  float normalTempValue = ((float) abs(tempValue - tempMedian)) / tempRange;
+//    Serial.println(tempValue);
+  
+  float normalLightValue = ((float) (lightValue - lightMedian)) / lightRange;
+  float normalHygrometerValue = ((float) (hygrometerValue - hygrometerMedian)) / hygrometerRange;
+  float normalTempValue = ((float) (tempValue - tempMedian)) / tempRange;
 
-  Serial.print(normalLightValue);   // Prints the value via the serial port
-  Serial.print(" ");
-  Serial.print(normalHygrometerValue);
-  Serial.print(" ");
-  Serial.println(normalTempValue);
+ Serial.print(normalLightValue);   // Prints the value via the serial port
+ Serial.print(" ");
+ Serial.print(normalHygrometerValue);
+ Serial.print(" ");
+ Serial.println(normalTempValue);
+  
+  normalLightValue = (abs)normalLightValue;
+  normalHygrometerValue = (abs)normalHygrometerValue;
+  normalTempValue = (abs)normalTempValue;
+  
 
 //  Serial.print(lightLow);   // Prints the value via the serial port
 //  Serial.print(" ");
@@ -79,6 +87,8 @@ void loop()                     // this runs over and over again forever
 //  Serial.print(tempLow);
 //  Serial.print(" ");
 //  Serial.println(tempHigh);
+
+//  Serial.println("------------------");
 
   if(normalLightValue > .5 && normalLightValue > normalHygrometerValue && normalLightValue > normalTempValue) {
     if (lightValue < lightLow) {
@@ -124,6 +134,16 @@ void serialEvent()
     } else {
       index = 0;
       readValue = atoi(inputValues);
+      tempLow = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
+      tempHigh = readValue;
+      while(inputValues[index] != ' ')
+        index++;
+      index++;
+      readValue = atoi(&inputValues[index]);
       lightLow = readValue;
       while(inputValues[index] != ' ')
         index++;
@@ -140,16 +160,6 @@ void serialEvent()
       index++;
       readValue = atoi(&inputValues[index]);
       hygrometerHigh = readValue;
-      while(inputValues[index] != ' ')
-        index++;
-      index++;
-      readValue = atoi(&inputValues[index]);
-      tempLow = readValue;
-      while(inputValues[index] != ' ')
-        index++;
-      index++;
-      readValue = atoi(&inputValues[index]);
-      tempHigh = readValue;
       index = 0;
       spaces = 0;
     }
