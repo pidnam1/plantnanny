@@ -11,8 +11,8 @@ int lightValue = 0;  // stores value from ADC
 int hygrometerValue = 0;
 int tempValue = 0;
 
-int lightLow = 800;        // range for light, hygrometer, and temp
-int lightHigh = 980;
+int lightLow = 75;        // range for light, hygrometer, and temp
+int lightHigh = 95;
 int hygrometerLow = 10;
 int hygrometerHigh = 25;
 int tempLow = 65;
@@ -48,9 +48,9 @@ void loop()                     // this runs over and over again forever
   int hygrometerRange = hygrometerHigh - hygrometerLow;
   int tempRange = tempHigh - tempLow;
   
-  int lightValue = analogRead (lightPin);   // reads the sensor
-  int hygrometerValue = analogRead (hygrometerPin);
-  float tempValue = analogRead (tempPin) * 0.48828125;
+  int lightValue = map(analogRead(lightPin), 0, 1023, 0, 100);   // reads the sensor
+  int hygrometerValue = map(analogRead(hygrometerPin), 0, 1023, 0, 100);
+  float tempValue = analogRead(tempPin) * 0.48828125;
   
   Serial.print(tempValue);   // Prints the value via the serial port
   Serial.print(" ");
