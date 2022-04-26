@@ -64,11 +64,11 @@ void loop()                     // this runs over and over again forever
   float normalHygrometerValue = ((float) abs(hygrometerValue - hygrometerMedian)) / hygrometerRange;
   float normalTempValue = ((float) abs(tempValue - tempMedian)) / tempRange;
 
-//  Serial.print(normalLightValue);   // Prints the value via the serial port
-//  Serial.print(" ");
-//  Serial.print(normalHygrometerValue);
-//  Serial.print(" ");
-//  Serial.println(normalTempValue);
+ Serial.print(normalLightValue);   // Prints the value via the serial port
+ Serial.print(" ");
+ Serial.print(normalHygrometerValue);
+ Serial.print(" ");
+ Serial.println(normalTempValue);
 
 //  Serial.print(lightLow);   // Prints the value via the serial port
 //  Serial.print(" ");
