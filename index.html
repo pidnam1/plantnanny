@@ -112,7 +112,7 @@
 
                         <div class = "col-md-6">
                           <label>Light Level Max%:</label>
-                          <input type="text" name="light_input_ma" id="light_input_max" placeholder="Light Level" />
+                          <input type="text" name="light_input_max" id="light_input_max" placeholder="Light Level" />
 
                         </div>
 
@@ -264,9 +264,9 @@
         //update_status(); // updates if poppy is thirsty, hot, cold, etc
         
         const max_value = Math.max(data.norm_temp, data.norm_light, data.norm_soil);
-        //console.log(max_value);
+        console.log(max_value);
         const min_value = Math.min(data.norm_temp, data.norm_light, data.norm_soil);
-        //console.log(min_value);
+        console.log(min_value);
         const not_healthy = Math.abs(min_value) > 0.5 || Math.abs(max_value) > 0.5;
         if(Math.abs(min_value) > Math.abs(max_value) && not_healthy){
           switch(min_value){

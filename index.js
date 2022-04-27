@@ -1,3 +1,10 @@
+let temp = 0;
+let light = 0;
+let soil = 0;
+let norm_light = 0;
+let norm_soil = 0;
+let norm_temp = 0;
+
 var express = require("express");
 var express = require("express");
 var path = require("path");
@@ -85,18 +92,38 @@ app.use(express.static("public")); //Send index.html page on GET /
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n", Buffer: 2 }));
 parser.on("data", (data) => {
   //Read data and print to test
-  let temp = data.slice(0, 1);
-  let light = data.slice(2, 3);
-  let soil = data.slice(4, 5);
-  let norm_light = parseInt(data.slice(6, 7));
-  let norm_soil = parseInt(data.slice(8, 9));
-  let norm_temp = parseInt(data.slice(10, 11));
+  console.log(data);
+  const myArray = data.split(" ");
+  temp = parseFloat(myArray[0]);
+  light = parseFloat(myArray[1]);
+  soil = parseFloat(myArray[2]);
+  norm_light = parseFloat(myArray[3]);
+  norm_soil = parseFloat(myArray[4]);
+  norm_temp = parseFloat(myArray[5]);
 
-  //console.log("backend");
+//   //console.log("backend");
 
+//     var today = new Date();
+//     io.sockets.emit("temp", {
+//       date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
+//       time: today.getHours() + ":" + today.getMinutes(),
+//       temp: temp,
+//       light: light,
+//       soil: soil,
+//       norm_temp: norm_temp,
+//       norm_light: norm_light,
+//       norm_soil: norm_soil,
+//     }); //emit the datd i.e. {date, time, temp} to all the connected clients.
+});
+
+io.on("connection", (socket) => {
+  console.log("Someone connected.");
+
+  // counter = 1;
   setInterval(() => {
-    var today = new Date();
-    io.sockets.emit("temp", {
+    let today = new Date();
+    // counter += 1;
+    socket.emit("temp", {
       date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
       time: today.getHours() + ":" + today.getMinutes(),
       temp: temp,
@@ -105,26 +132,6 @@ parser.on("data", (data) => {
       norm_temp: norm_temp,
       norm_light: norm_light,
       norm_soil: norm_soil,
-    }); //emit the datd i.e. {date, time, temp} to all the connected clients.
-  }, 5000);
-});
-
-io.on("connection", (socket) => {
-  console.log("Someone connected.");
-
-  // counter = 1;
-  // setInterval(() => {
-  //   let today = new Date();
-  //   counter += 1;
-  //   socket.emit("temp", {
-  //     date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
-  //     time: today.getHours() + ":" + today.getMinutes(),
-  //     temp: 0 + counter,
-  //     light: 0 + counter,
-  //     soil: 0 + counter,
-  //     norm_temp: 0.4,
-  //     norm_light: 0.4,
-  //     norm_soil: -0.4,
-  //   }); //show a log as a new client connects, check socket is working.
-  // }, 2000);
+    }); //show a log as a new client connects, check socket is working.
+  },3000);
 });
