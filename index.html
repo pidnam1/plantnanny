@@ -267,7 +267,7 @@
         console.log(max_value);
         const min_value = Math.min(data.norm_temp, data.norm_light, data.norm_soil);
         console.log(min_value);
-        const not_healthy = Math.abs(min_value) > 0.5 || Math.abs(max_value) > 0.5;
+        const not_healthy = Math.abs(min_value) >= 0.5 || Math.abs(max_value) > 0.5;
         if(Math.abs(min_value) > Math.abs(max_value) && not_healthy){
           switch(min_value){
             case data.norm_temp:
@@ -280,7 +280,7 @@
               document.getElementById("feeling").innerHTML = "Dry";
           }
         }
-        else if(Math.abs(max_value) > Math.abs(min_value) && not_healthy){
+        else if(Math.abs(max_value) >= Math.abs(min_value) && not_healthy){
           switch(max_value){
             case data.norm_temp:
               document.getElementById("feeling").innerHTML = "Hot";
