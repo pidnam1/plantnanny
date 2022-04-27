@@ -83,12 +83,19 @@ app.use(express.static("public")); //Send index.html page on GET /
 
 //Read the line only when new line comes. Buffer fooling around with speed.
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n", Buffer: 2 }));
-parser.on("data", (temp, light, soil, norm_light, norm_soil, norm_temp) => {
+parser.on("data", (data) => {
   //Read data and print to test
-  console.log(temp);
+  let temp = data.slice(0, 1);
+  let light = data.slice(2, 3);
+  let soil = data.slice(4, 5);
+  let norm_light = parseInt(data.slice(6, 7));
+  let norm_soil = parseInt(data.slice(8, 9));
+  let norm_temp = parseInt(data.slice(10, 11));
+
   //console.log("backend");
-  var today = new Date();
+
   setInterval(() => {
+    var today = new Date();
     io.sockets.emit("temp", {
       date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
       time: today.getHours() + ":" + today.getMinutes(),
@@ -104,19 +111,20 @@ parser.on("data", (temp, light, soil, norm_light, norm_soil, norm_temp) => {
 
 io.on("connection", (socket) => {
   console.log("Someone connected.");
-  // let today = new Date();
-  // counter = 0;
+
+  // counter = 1;
   // setInterval(() => {
+  //   let today = new Date();
   //   counter += 1;
   //   socket.emit("temp", {
   //     date: today.getDate() + "-" + today.getMonth() + 1 + "-" + today.getFullYear(),
   //     time: today.getHours() + ":" + today.getMinutes(),
-  //     temp: 40 + counter,
-  //     light: 55 - counter,
-  //     soil: 80 - counter,
+  //     temp: 0 + counter,
+  //     light: 0 + counter,
+  //     soil: 0 + counter,
   //     norm_temp: 0.4,
   //     norm_light: 0.4,
   //     norm_soil: -0.4,
   //   }); //show a log as a new client connects, check socket is working.
-  // }, 5000);
+  // }, 2000);
 });

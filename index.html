@@ -93,18 +93,43 @@
                     </div>
                     <div class="form-group" style="text-align:center;">
                         <form name="form_name" action="/" id="form_id" method="POST" class="form_class" >
+                          <div class = "row">
+                            <div class = "col-md-6">
                           <label>Temperature Min:</label>
                           <input type="text" name="temperature_input_min" id="temperature_input_min" placeholder="Temperature Min" />
+                        </div>
+                        <div class = "col-md-6">
                           <label>Temperature Max:</label>
                           <input type="text" name="temperature_input_max" id="temperature_input_max" placeholder="Temperature Max" />
+                        </div>
+                        </div>
+                          
+                        <div class = "row">
+                          <div class = "col-md-6">
                           <label>Light Level Min%:</label>
                           <input type="text" name="light_input_min" id="light_input_min" placeholder="Light Level" />
+                        </div>
+
+                        <div class = "col-md-6">
                           <label>Light Level Max%:</label>
                           <input type="text" name="light_input_ma" id="light_input_max" placeholder="Light Level" />
+
+                        </div>
+
+                        </div>
+                        <div class = "row">
+                          <div class = "col-md-6">
                           <label>Soil Moisture Min%:</label>
                           <input type="text" name="soil_input_min" id="soil_input_min" placeholder="Soil Moisture" />
+                        </div>
+
+                        <div class = "col-md-6">
                           <label>Soil Moisture Max%:</label>
                           <input type="text" name="soil_input_max" id="soil_input_max" placeholder="Soil Moisture" />
+
+                        </div>
+
+                        </div>
                           <button type ="submit" class = "submit_values"data-id="modal_button">Submit</button>
                         </form>
                         
@@ -239,9 +264,9 @@
         //update_status(); // updates if poppy is thirsty, hot, cold, etc
         
         const max_value = Math.max(data.norm_temp, data.norm_light, data.norm_soil);
-        console.log(max_value);
+        //console.log(max_value);
         const min_value = Math.min(data.norm_temp, data.norm_light, data.norm_soil);
-        console.log(min_value);
+        //console.log(min_value);
         const not_healthy = Math.abs(min_value) > 0.5 || Math.abs(max_value) > 0.5;
         if(Math.abs(min_value) > Math.abs(max_value) && not_healthy){
           switch(min_value){
@@ -269,7 +294,7 @@
         } else{
           document.getElementById("feeling").innerHTML = "Healthy";
         }
-
+        console.log(chart.data.labels);
         if (chart.data.labels.length != 15) {
           //If we have less than 15 data points in the graph
           chart.data.labels.push(data.time); //Add time in x-asix
@@ -282,6 +307,9 @@
           //If there are already 15 data points in the graph.
           chart.data.labels.shift(); //Remove first time data
           chart.data.labels.push(data.time); //Insert latest time data
+          chart.data.datasets[0].data.shift();
+          chart.data.datasets[1].data.shift();
+          chart.data.datasets[2].data.shift();
           chart.data.datasets[0].data.push((data.temp));
           chart.data.datasets[1].data.push((data.light));
           chart.data.datasets[2].data.push((data.soil));
